@@ -1,0 +1,31 @@
+{
+  "version": 3,
+  "builds": [
+    {
+      "src": "manage.py",
+      "use": "@vercel/python",
+      "config": { "maxLambdaSize": "50mb" }
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "manage.py"
+    }
+  ],
+  "env": {
+    "SECRET_KEY": "django-insecure-k5e5$a($#2(hznd^w41djokznm7%ibonta$_jy(^0@5xmil9$3",
+    "DEBUG": "True",
+    "ALLOWED_HOSTS": "127.0.0.1,localhost,.vercel.app",
+    "DATABASE_URL": "postgresql://postgres:Deanambrose@12345@db.chqumlvofruxwkzqrsxk.supabase.co:5432/postgres",
+    "SUPABASE_URL": "https://dcssjbdtwofaaiyyfzit.supabase.co",
+    "SUPABASE_KEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRjc3NqYmR0d29mYWFpeXlmeml0Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1NjM0ODE5OCwiZXhwIjoyMDcxOTI0MTk4fQ.Iv9c_iGRr4TXYdvQxgaQfbvm4Fe2J4NGl2kftyWL0g0",
+    "SUPABASE_BUCKET": "Avatar",
+    "EMAIL_HOST": "smtp.supabase.io",
+    "EMAIL_PORT": "465",
+    "EMAIL_USE_TLS": "True",
+    "EMAIL_HOST_USER": "noreply@yourproject.supabase.co",
+    "EMAIL_HOST_PASSWORD": "Deanambrose@12345",
+    "DEFAULT_FROM_EMAIL": "noreply@yourproject.supabase.co"
+  }
+}
