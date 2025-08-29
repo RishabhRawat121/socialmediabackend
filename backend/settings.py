@@ -11,8 +11,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY
 # ----------------------
 SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", "django-insecure-default-key")
-DEBUG = True
-ALLOWED_HOSTS = ["*"]  # In production, replace "*" with your domain
+DEBUG = True  # Set False in production
+ALLOWED_HOSTS = [
+    "socialmediabackend1-eff9bkwvd-rishabhs-projects-2134ba34.vercel.app",
+    "localhost",
+    "127.0.0.1",
+]
 
 # ----------------------
 # DATABASE
@@ -45,7 +49,7 @@ MEDIA_ROOT = BASE_DIR / "media"
 # STATIC (CSS, JS, images)
 # ----------------------
 STATIC_URL = "/static/"
-STATICFILES_DIRS = [BASE_DIR / "static"]  # Dev files
+STATICFILES_DIRS = [BASE_DIR / "static"]  # For development
 STATIC_ROOT = BASE_DIR / "staticfiles"    # collectstatic destination
 
 # ----------------------
