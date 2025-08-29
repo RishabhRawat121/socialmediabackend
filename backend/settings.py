@@ -11,9 +11,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY
 # ----------------------
 SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", "django-insecure-default-key")
-DEBUG = True  # Set False in production
+DEBUG = False  # Production mode
 ALLOWED_HOSTS = [
-    "socialmediabackend1-eff9bkwvd-rishabhs-projects-2134ba34.vercel.app",
+    "socialmediabackend1.vercel.app",
     "localhost",
     "127.0.0.1",
 ]
@@ -49,11 +49,11 @@ MEDIA_ROOT = BASE_DIR / "media"
 # STATIC (CSS, JS, images)
 # ----------------------
 STATIC_URL = "/static/"
-STATICFILES_DIRS = [BASE_DIR / "static"]  # For development
+STATICFILES_DIRS = [BASE_DIR / "static"]  # Dev files
 STATIC_ROOT = BASE_DIR / "staticfiles"    # collectstatic destination
 
 # ----------------------
-# EMAIL
+# EMAIL (optional)
 # ----------------------
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 DEFAULT_FROM_EMAIL = "noreply@example.com"
@@ -90,7 +90,7 @@ INSTALLED_APPS = [
 # MIDDLEWARE
 # ----------------------
 MIDDLEWARE = [
-    "corsheaders.middleware.CorsMiddleware",  # must be first
+    "corsheaders.middleware.CorsMiddleware",  # MUST be first
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -108,13 +108,16 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
 ]
 CORS_ALLOW_CREDENTIALS = True
-CSRF_TRUSTED_ORIGINS = CORS_ALLOWED_ORIGINS
 
+CSRF_TRUSTED_ORIGINS = [
+    "https://socialmediabackend1.vercel.app",
+    "http://localhost:3000",
+]
 
 SESSION_COOKIE_SAMESITE = "Lax"
-SESSION_COOKIE_SECURE = False
+SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SAMESITE = "Lax"
-CSRF_COOKIE_SECURE = False
+CSRF_COOKIE_SECURE = True
 
 # ----------------------
 # REST FRAMEWORK
