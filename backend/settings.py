@@ -17,16 +17,19 @@ SUPABASE_KEY = os.getenv("SUPABASE_KEY", "<your-key>")
 SUPABASE_BUCKET = os.getenv("SUPABASE_BUCKET", "avatars")
 
 # DATABASE
+import dj_database_url
+
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": os.getenv("DB_NAME", "postgres"),
-        "USER": os.getenv("DB_USER", "postgres"),
-        "PASSWORD": os.getenv("DB_PASSWORD", "Deanambrose@12345"),
-        "HOST": os.getenv("DB_HOST", "db.dcssjbdtwofaaiyyfzit.supabase.co"),
-        "PORT": os.getenv("DB_PORT", "5432"),
-    }
+    "default": dj_database_url.parse(
+        os.getenv(
+            "DATABASE_URL",
+            "postgresql://DB_USER:DB_PASSWORD@db.dcssjbdtwofaaiyyfzit.supabase.co:5432/DB_NAME?sslmode=require"
+        ),
+        conn_max_age=600,
+        ssl_require=True
+    )
 }
+
 
 # MEDIA
 MEDIA_URL = "/media/"
