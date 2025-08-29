@@ -1,50 +1,52 @@
-import os
 from pathlib import Path
+import os
 from dotenv import load_dotenv
 
-# Load environment variables
 load_dotenv()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# ----------------------
 # SECURITY
-# ----------------------
-SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", "fallback-secret")
-DEBUG = False  # Production mode
-ALLOWED_HOSTS = [
-    "socialmediabackend1.vercel.app",  # Your backend domain
-    ".vercel.app"  # Allow Vercel subdomains
-]
+SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", "django-insecure-default-key")
+DEBUG = True
+ALLOWED_HOSTS = ["*"]  # For development only
 
-# ----------------------
-# DATABASE (Supabase PostgreSQL)
-# ----------------------
+# SUPABASE
+SUPABASE_URL = os.getenv("SUPABASE_URL", "https://dcssjbdtwofaaiyyfzit.supabase.co")
+SUPABASE_KEY = os.getenv("SUPABASE_KEY", "<your-key>")
+SUPABASE_BUCKET = os.getenv("SUPABASE_BUCKET", "avatars")
+
+# DATABASE
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": os.getenv("DB_NAME"),
-        "USER": os.getenv("DB_USER"),
-        "PASSWORD": os.getenv("DB_PASSWORD"),
-        "HOST": os.getenv("DB_HOST"),
+        "NAME": os.getenv("DB_NAME", "postgres"),
+        "USER": os.getenv("DB_USER", "postgres"),
+        "PASSWORD": os.getenv("DB_PASSWORD", "Deanambrose@12345"),
+        "HOST": os.getenv("DB_HOST", "db.dcssjbdtwofaaiyyfzit.supabase.co"),
         "PORT": os.getenv("DB_PORT", "5432"),
     }
 }
 
-# ----------------------
-# STATIC / MEDIA FILES
-# ----------------------
-STATIC_URL = "/static/"
-STATIC_ROOT = BASE_DIR / "staticfiles"  # run collectstatic before production
-
+# MEDIA (user uploads like avatars)
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
 
-# ----------------------
-# CORS / CSRF
-# ----------------------
+# STATIC (CSS, JS, images)
+STATIC_URL = "/static/"
+STATICFILES_DIRS = [BASE_DIR / "static"]  # additional folders for dev
+STATIC_ROOT = BASE_DIR / "staticfiles"    # collectstatic destination
+
+# EMAIL (development)
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+DEFAULT_FROM_EMAIL = "noreply@example.com"
+
+# ROOT URL
+ROOT_URLCONF = 'backend.urls'  # Replace 'backend' with your project folder
+
+# INSTALLED APPS
 INSTALLED_APPS = [
-    # Django default
+    # Django
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -56,6 +58,8 @@ INSTALLED_APPS = [
     "rest_framework",
     "rest_framework_simplejwt",
     "corsheaders",
+    
+    # Channels
     "channels",
 
     # Your apps
@@ -63,8 +67,9 @@ INSTALLED_APPS = [
     "posts",
 ]
 
+# MIDDLEWARE
 MIDDLEWARE = [
-    "corsheaders.middleware.CorsMiddleware",  # MUST be first
+    "corsheaders.middleware.CorsMiddleware",  # must be first
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -74,21 +79,17 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-CORS_ALLOWED_ORIGINS = [
-    "https://your-frontend.vercel.app",  # Replace with your actual frontend domain
-    "http://localhost:3000",             # Development frontend
-]
-CSRF_TRUSTED_ORIGINS = CORS_ALLOWED_ORIGINS
+# CORS / CSRF
+CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_CREDENTIALS = True
+CSRF_TRUSTED_ORIGINS = ["http://localhost:3000", "http://127.0.0.1:3000"]
 
 SESSION_COOKIE_SAMESITE = "Lax"
-SESSION_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = False
 CSRF_COOKIE_SAMESITE = "Lax"
-CSRF_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = False
 
-# ----------------------
 # REST FRAMEWORK
-# ----------------------
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "rest_framework_simplejwt.authentication.JWTAuthentication",
@@ -98,21 +99,7 @@ REST_FRAMEWORK = {
     ),
 }
 
-# ----------------------
-# EMAIL
-# ----------------------
-EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-EMAIL_HOST = os.getenv("EMAIL_HOST", "smtp.supabase.io")
-EMAIL_PORT = int(os.getenv("EMAIL_PORT", 465))
-EMAIL_USE_TLS = os.getenv("EMAIL_USE_TLS", "True") == "True"
-EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
-EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
-DEFAULT_FROM_EMAIL = os.getenv("DEFAULT_FROM_EMAIL", EMAIL_HOST_USER)
-
-# ----------------------
 # TEMPLATES
-# ----------------------
-ROOT_URLCONF = "backend.urls"  # Replace 'backend' with your project folder
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
@@ -129,27 +116,19 @@ TEMPLATES = [
     },
 ]
 
-# ----------------------
-# DEFAULT PK / TIMEZONE
-# ----------------------
+# DEFAULT PK
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+# TIMEZONE / I18N
 LANGUAGE_CODE = "en-us"
 TIME_ZONE = "UTC"
 USE_I18N = True
 USE_TZ = True
 
-# ----------------------
-# CHANNELS
-# ----------------------
-ASGI_APPLICATION = "backend.asgi.application"  # Replace 'backend' with your project folder
+# Channels
+ASGI_APPLICATION = 'yourproject.asgi.application'
 CHANNEL_LAYERS = {
     "default": {
-        "BACKEND": "channels.layers.InMemoryChannelLayer",  # Dev only
+        "BACKEND": "channels.layers.InMemoryChannelLayer",
     },
 }
-
-# ----------------------
-# MEDIA & STATIC FOR DEVELOPMENT SERVER
-# ----------------------
-if DEBUG:
-    INSTALLED_APPS += ["django_extensions"]
