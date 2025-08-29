@@ -104,11 +104,12 @@ MIDDLEWARE = [
 # CORS / CSRF
 # ----------------------
 CORS_ALLOWED_ORIGINS = [
-    "https://socialmediabackend1-eff9bkwvd-rishabhs-projects-2134ba34.vercel.app",
+    "https://socialmediabackend1.vercel.app",
     "http://localhost:3000",
 ]
 CORS_ALLOW_CREDENTIALS = True
 CSRF_TRUSTED_ORIGINS = CORS_ALLOWED_ORIGINS
+
 
 SESSION_COOKIE_SAMESITE = "Lax"
 SESSION_COOKIE_SECURE = False
