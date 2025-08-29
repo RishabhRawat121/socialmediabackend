@@ -1,7 +1,8 @@
 Django==5.2
 djangorestframework
 djangorestframework-simplejwt
+channels
 psycopg2-binary
 python-dotenv
-django-cors-headers
-channels
+supabase
+gunicorn
