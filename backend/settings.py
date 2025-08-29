@@ -2,21 +2,21 @@ from pathlib import Path
 import os
 from dotenv import load_dotenv
 
+# Load environment variables
 load_dotenv()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# ----------------------
 # SECURITY
+# ----------------------
 SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", "django-insecure-default-key")
 DEBUG = True
-ALLOWED_HOSTS = ["*"]  # For development only
+ALLOWED_HOSTS = ["*"]  # In production, replace "*" with your domain
 
-# SUPABASE
-SUPABASE_URL = os.getenv("SUPABASE_URL", "https://dcssjbdtwofaaiyyfzit.supabase.co")
-SUPABASE_KEY = os.getenv("SUPABASE_KEY", "<your-key>")
-SUPABASE_BUCKET = os.getenv("SUPABASE_BUCKET", "avatars")
-
+# ----------------------
 # DATABASE
+# ----------------------
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
@@ -28,25 +28,42 @@ DATABASES = {
     }
 }
 
+# ----------------------
+# SUPABASE
+# ----------------------
+SUPABASE_URL = os.getenv("SUPABASE_URL")
+SUPABASE_KEY = os.getenv("SUPABASE_KEY")
+SUPABASE_BUCKET = os.getenv("SUPABASE_BUCKET", "avatars")
+
+# ----------------------
 # MEDIA (user uploads like avatars)
+# ----------------------
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
 
+# ----------------------
 # STATIC (CSS, JS, images)
+# ----------------------
 STATIC_URL = "/static/"
-STATICFILES_DIRS = [BASE_DIR / "static"]  # additional folders for dev
+STATICFILES_DIRS = [BASE_DIR / "static"]  # Dev files
 STATIC_ROOT = BASE_DIR / "staticfiles"    # collectstatic destination
 
-# EMAIL (development)
+# ----------------------
+# EMAIL
+# ----------------------
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 DEFAULT_FROM_EMAIL = "noreply@example.com"
 
-# ROOT URL
-ROOT_URLCONF = 'backend.urls'  # Replace 'backend' with your project folder
+# ----------------------
+# ROOT URLS
+# ----------------------
+ROOT_URLCONF = "backend.urls"  # Replace 'backend' with your project folder
 
+# ----------------------
 # INSTALLED APPS
+# ----------------------
 INSTALLED_APPS = [
-    # Django
+    # Django default
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -58,8 +75,6 @@ INSTALLED_APPS = [
     "rest_framework",
     "rest_framework_simplejwt",
     "corsheaders",
-    
-    # Channels
     "channels",
 
     # Your apps
@@ -67,7 +82,9 @@ INSTALLED_APPS = [
     "posts",
 ]
 
+# ----------------------
 # MIDDLEWARE
+# ----------------------
 MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",  # must be first
     "django.middleware.security.SecurityMiddleware",
@@ -79,17 +96,24 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
+# ----------------------
 # CORS / CSRF
-CORS_ALLOW_ALL_ORIGINS = True
+# ----------------------
+CORS_ALLOWED_ORIGINS = [
+    "https://socialmediabackend1-eff9bkwvd-rishabhs-projects-2134ba34.vercel.app",
+    "http://localhost:3000",
+]
 CORS_ALLOW_CREDENTIALS = True
-CSRF_TRUSTED_ORIGINS = ["http://localhost:3000", "http://127.0.0.1:3000"]
+CSRF_TRUSTED_ORIGINS = CORS_ALLOWED_ORIGINS
 
 SESSION_COOKIE_SAMESITE = "Lax"
 SESSION_COOKIE_SECURE = False
 CSRF_COOKIE_SAMESITE = "Lax"
 CSRF_COOKIE_SECURE = False
 
+# ----------------------
 # REST FRAMEWORK
+# ----------------------
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "rest_framework_simplejwt.authentication.JWTAuthentication",
@@ -99,7 +123,9 @@ REST_FRAMEWORK = {
     ),
 }
 
+# ----------------------
 # TEMPLATES
+# ----------------------
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
@@ -116,17 +142,23 @@ TEMPLATES = [
     },
 ]
 
+# ----------------------
 # DEFAULT PK
+# ----------------------
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
+# ----------------------
 # TIMEZONE / I18N
+# ----------------------
 LANGUAGE_CODE = "en-us"
 TIME_ZONE = "UTC"
 USE_I18N = True
 USE_TZ = True
 
-# Channels
-ASGI_APPLICATION = 'yourproject.asgi.application'
+# ----------------------
+# CHANNELS
+# ----------------------
+ASGI_APPLICATION = "backend.asgi.application"  # Replace 'backend' with your project folder
 CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels.layers.InMemoryChannelLayer",
