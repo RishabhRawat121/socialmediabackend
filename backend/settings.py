@@ -28,21 +28,19 @@ DATABASES = {
     }
 }
 
-# MEDIA (user uploads like avatars)
+# MEDIA
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
 
-# STATIC (CSS, JS, images)
+# STATIC
 STATIC_URL = "/static/"
-STATICFILES_DIRS = [BASE_DIR / "static"]  # additional folders for dev
-STATIC_ROOT = BASE_DIR / "staticfiles"    # collectstatic destination
 
 # EMAIL (development)
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 DEFAULT_FROM_EMAIL = "noreply@example.com"
 
-# ROOT URL
-ROOT_URLCONF = 'backend.urls'  # Replace 'backend' with your project folder
+ROOT_URLCONF = 'backend.urls'  # Replace 'backend' with the name of your Django project folder
+
 
 # INSTALLED APPS
 INSTALLED_APPS = [
@@ -58,13 +56,10 @@ INSTALLED_APPS = [
     "rest_framework",
     "rest_framework_simplejwt",
     "corsheaders",
-    
-    # Channels
-    "channels",
 
     # Your apps
     "users",
-    "posts",
+    'posts',
 ]
 
 # MIDDLEWARE
@@ -80,7 +75,7 @@ MIDDLEWARE = [
 ]
 
 # CORS / CSRF
-CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_ALL_ORIGINS = True  # development only
 CORS_ALLOW_CREDENTIALS = True
 CSRF_TRUSTED_ORIGINS = ["http://localhost:3000", "http://127.0.0.1:3000"]
 
@@ -124,11 +119,3 @@ LANGUAGE_CODE = "en-us"
 TIME_ZONE = "UTC"
 USE_I18N = True
 USE_TZ = True
-
-# Channels
-ASGI_APPLICATION = 'yourproject.asgi.application'
-CHANNEL_LAYERS = {
-    "default": {
-        "BACKEND": "channels.layers.InMemoryChannelLayer",
-    },
-}
