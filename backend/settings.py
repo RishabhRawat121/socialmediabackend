@@ -13,8 +13,8 @@ ALLOWED_HOSTS = ["*"]  # For development only
 
 # SUPABASE
 SUPABASE_URL = os.getenv("SUPABASE_URL", "https://dcssjbdtwofaaiyyfzit.supabase.co")
-SUPABASE_KEY = os.getenv("SUPABASE_KEY", "<your-key>")
-SUPABASE_BUCKET = os.getenv("SUPABASE_BUCKET", "avatars")
+SUPABASE_KEY = os.getenv("SUPABASE_KEY", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRjc3NqYmR0d29mYWFpeXlmeml0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTYzNDgxOTgsImV4cCI6MjA3MTkyNDE5OH0.hlJKsSxH1QZuGeApT3YOcz6CLGxVC7GjisEdexZt5E8")
+SUPABASE_BUCKET = os.getenv("SUPABASE_BUCKET", "Avatar")
 
 # DATABASE
 import dj_database_url
@@ -81,7 +81,7 @@ MIDDLEWARE = [
 # CORS / CSRF
 CORS_ALLOW_ALL_ORIGINS = True  # development only
 CORS_ALLOW_CREDENTIALS = True
-CSRF_TRUSTED_ORIGINS = ["http://localhost:3000", "http://127.0.0.1:3000"]
+CSRF_TRUSTED_ORIGINS = ["http://localhost:3000", "https://socialmediabackend-16.onrender.com"]
 
 SESSION_COOKIE_SAMESITE = "Lax"
 SESSION_COOKIE_SECURE = False
