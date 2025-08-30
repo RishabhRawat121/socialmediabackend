@@ -48,6 +48,7 @@ ROOT_URLCONF = 'backend.urls'  # Replace 'backend' with the name of your Django 
 # INSTALLED APPS
 INSTALLED_APPS = [
     # Django
+    "corsheaders",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -58,7 +59,7 @@ INSTALLED_APPS = [
     # Third-party
     "rest_framework",
     "rest_framework_simplejwt",
-    "corsheaders",
+    
 
     # Your apps
     "users",
