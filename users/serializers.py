@@ -1,9 +1,6 @@
 from rest_framework import serializers
-from django.contrib.auth import get_user_model
-from django.core.mail import send_mail
-from django.conf import settings
-from .models import Profile, Post, Follow
-from .supabase_utils import upload_avatar  # your utility function
+from django.contrib.auth import get_user_model, authenticate
+from .models import Profile, Post, Follow, Notification
 
 User = get_user_model()
 
@@ -11,16 +8,9 @@ User = get_user_model()
 # --------------------------
 # Register Serializer
 # --------------------------
-from rest_framework import serializers
-from django.contrib.auth import get_user_model
-from .models import Profile
-
-User = get_user_model()
-
 class RegisterSerializer(serializers.ModelSerializer):
-    
     password = serializers.CharField(write_only=True)
-    
+
     class Meta:
         model = User
         fields = ["username", "email", "password", "first_name", "last_name"]
@@ -37,15 +27,9 @@ class RegisterSerializer(serializers.ModelSerializer):
         return user
 
 
-
 # --------------------------
 # Login Serializer
 # --------------------------
-from django.contrib.auth import authenticate
-from django.contrib.auth import get_user_model
-
-User = get_user_model()
-
 class LoginSerializer(serializers.Serializer):
     username = serializers.CharField(required=False)
     email = serializers.EmailField(required=False)
@@ -58,13 +42,10 @@ class LoginSerializer(serializers.Serializer):
 
         if not username and not email:
             raise serializers.ValidationError("Username or email is required")
-        
         if not password:
             raise serializers.ValidationError("Password is required")
-        
-        # Authenticate user
+
         user = None
-        
         if username:
             user = authenticate(username=username, password=password)
         elif email:
@@ -73,15 +54,15 @@ class LoginSerializer(serializers.Serializer):
                 user = authenticate(username=user_obj.username, password=password)
             except User.DoesNotExist:
                 pass
-        
+
         if not user:
             raise serializers.ValidationError("Invalid credentials")
-        
         if not user.is_active:
             raise serializers.ValidationError("User account is disabled")
-        
+
         data['user'] = user
         return data
+
 
 # --------------------------
 # Profile Serializer
@@ -137,9 +118,9 @@ class PostSerializer(serializers.ModelSerializer):
         read_only_fields = ["id", "created_at", "user"]
 
 
-from rest_framework import serializers
-from .models import Notification
-
+# --------------------------
+# Notification Serializer
+# --------------------------
 class NotificationSerializer(serializers.ModelSerializer):
     sender = serializers.StringRelatedField()
     receiver = serializers.StringRelatedField()
@@ -147,5 +128,4 @@ class NotificationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Notification
-        fields = '__all__'
-
+        fields = "__all__"
