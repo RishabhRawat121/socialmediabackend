@@ -7,7 +7,8 @@ from django.conf.urls.static import static
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("api/auth/", include("users.urls")),     # your auth app
-    path("api/posts/", include("posts.urls")),    # routes above
+    path("api/posts/", include("posts.urls")),    
+    path("", home),# routes above
 ]
 
 if settings.DEBUG:
