@@ -26,30 +26,47 @@ class RegisterSerializer(serializers.ModelSerializer):
         Profile.objects.create(user=user)
         return user
 
-# users/views.py
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework import status
-from .serializers import LoginSerializer
-from rest_framework_simplejwt.tokens import RefreshToken
+from django.contrib.auth import authenticate, get_user_model
+from rest_framework import serializers
 
-class LoginAPIView(APIView):
-    def post(self, request):
-        serializer = LoginSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        user = serializer.validated_data['user']
+User = get_user_model()
 
-        refresh = RefreshToken.for_user(user)
-        return Response({
-            'access': str(refresh.access_token),
-            'refresh': str(refresh),
-            'user': {
-                'id': user.id,
-                'username': user.username,
-                'email': user.email
-            }
-        }, status=status.HTTP_200_OK)
+class LoginSerializer(serializers.Serializer):
+    username = serializers.CharField(required=False)
+    email = serializers.EmailField(required=False)
+    password = serializers.CharField(write_only=True)
 
+    def validate(self, data):
+        username = data.get("username")
+        email = data.get("email")
+        password = data.get("password")
+
+        if not username and not email:
+            raise serializers.ValidationError("Username or email is required")
+        if not password:
+            raise serializers.ValidationError("Password is required")
+
+        user = None
+
+        # Try username authentication
+        if username:
+            user = authenticate(username=username, password=password)
+
+        # Try email authentication
+        if not user and email:
+            try:
+                user_obj = User.objects.get(email=email)
+                user = authenticate(username=user_obj.username, password=password)
+            except User.DoesNotExist:
+                raise serializers.ValidationError("Invalid credentials")
+
+        if not user:
+            raise serializers.ValidationError("Invalid credentials")
+        if not user.is_active:
+            raise serializers.ValidationError("User account is disabled")
+
+        data['user'] = user
+        return data
 
 # --------------------------
 # Profile Serializer
